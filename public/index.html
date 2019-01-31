@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IP Score - Fraud Friction</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Dosis:400,700"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-family: 'Dosis', sans-serif;
+        line-height: 1.6;
+        color: #666;
+        background: #f6f6f6;
+        text-align: center;
+      }
+
+      #input {
+        width: 150px;
+        overflow: hidden;
+      }
+
+      #output {
+        letter-spacing: 1px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>IP Score - Fraud Friction</h1>
+    <label>Input an IP...</label>
+    <br />
+    <input id="input"></input>
+    <br />
+    <button id="submit" onclick="handleClick()">Submit</button>
+    <p id="output">JSON Output</p>
+    <script>
+      let last = '';
+      const savedURL = 'http://127.0.0.1:8080/score';
+      const input = document.getElementById('input');
+      const output = document.getElementById('output');
+      const debounce = (func, wait, immediate) => {
+        let timeout;
+        return function() {
+          let context = this,
+            args = arguments;
+          let later = () => {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+          };
+          let callNow = immediate && !timeout;
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+          if (callNow) func.apply(context, args);
+        };
+      };
+      const getFinalURL = params => {
+        let url = new URL(savedURL);
+        Object.keys(params).forEach(key =>
+          url.searchParams.append(key, params[key])
+        );
+        return url;
+      };
+      const handleClick = () =>
+        input.value !== last &&
+        fetch(getFinalURL({ ip: input.value }))
+          .then(response => response.json())
+          .then(data => {
+            output.innerHTML = JSON.stringify(data, null, 2);
+            last = input.value;
+          })
+          .catch(e => console.error(e));
+      input.addEventListener(
+        'keyup',
+        debounce(() => {
+          handleClick();
+        }, 250)
+      );
+    </script>
+  </body>
+</html>

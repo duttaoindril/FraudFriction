@@ -1,0 +1,25 @@
+{
+  "name": "fraudfriction",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "cls && nodemon server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duttaoindril/FraudFriction.git"
+  },
+  "author": "Oindril Dutta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/duttaoindril/FraudFriction/issues"
+  },
+  "homepage": "https://github.com/duttaoindril/FraudFriction#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4"
+  }
+}
